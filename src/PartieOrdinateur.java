@@ -60,6 +60,15 @@ public class PartieOrdinateur implements Runnable {
 				
 				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		        String reponse = in.readLine();
+		        
+		        int indiceDeRecherche = 0;
+		        
+		        while(motMystere.indexOf(reponse, indiceDeRecherche)>-1){
+		        	indiceDeRecherche += 1;
+		        	out.println("cette lettre est dans le mot!!");
+		        	
+		        	out.flush();
+		        }
 				
 				out.println("Entrez une lettre. Il reste "+ nbrEssais + " essais" );
 				out.flush();
