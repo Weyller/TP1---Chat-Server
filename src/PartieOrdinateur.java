@@ -49,36 +49,30 @@ public class PartieOrdinateur implements Runnable {
 			for(int i =0 ; i<nbrLettre;i++){
 				motAffiche += "-";
 			}
-			
+			//Affiche la progression du joueur et le nombre de lettres du mot
 			out.println("Mot choisi: "+motAffiche + "(" + nbrLettre + " lettres)");
 			out.flush();
 	        
-			out.println("Entrez une lettre. Il reste "+ nbrEssais + " essais" );
-			out.flush();
-			nbrEssais -= 1;
 			
 	        //vérifie si la lettre entrée est dans le mot mystère
-			while(nbrEssais+1 > 0 && motAffiche.contains("-")){
+			//===================================================================
+			while(nbrEssais > 0 && motAffiche.contains("-")){
+				
+				out.println("Entrez une lettre. Il reste "+ nbrEssais + " essais" );
+				out.flush();
 				
 				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		        String reponse = in.readLine();
 		        
 		        //**** http://www.cs.jhu.edu/~joanne/cs107/code/StaticMethods/hangmanMethods.java ****
-		        
-		       // int indiceDeRecherche = 0;
-		       // while(motMystere.indexOf(reponse, indiceDeRecherche)>-1){
-		        //	indiceDeRecherche += 1;
-		        //	out.println("cette lettre est dans le mot!!");
-		        	
-		        //	out.flush();
-		       // }
+		       
 		        
 		        char lettre;
 		        lettre = reponse.charAt(0);
 		        if(motMystere.indexOf(lettre) < 0){
 		        	out.println("mauvaise reponse");
 		        	out.println(motAffiche);
-		        	out.println("Entrez une lettre. Il reste "+ nbrEssais + " essais" );
+		        	//out.println("Entrez une lettre. Il reste "+ nbrEssais + " essais" );
 		        	out.flush();
 		        	nbrEssais -= 1;
 		        }
@@ -94,17 +88,14 @@ public class PartieOrdinateur implements Runnable {
 		        	}
 		        	out.println(motAffiche);
 		        	out.flush();
-		        	if(motAffiche.contains("-")){
-		        		out.println("Entrez une lettre. Il reste "+ nbrEssais + " essais" );
-		        		out.flush();
-		        	}
 		        }
 		     
-		        
-		        
 			}
-			System.out.println(nbrEssais);
-			if(nbrEssais == -1){
+			//===================================================================
+			
+			//Fin de la partie
+			//===================================================================
+			if(nbrEssais == 0){
 				out.println("Vous avez perdu!!!");
 				out.println("\n_________");
 				out.println("|       |");
@@ -129,6 +120,7 @@ public class PartieOrdinateur implements Runnable {
 			
 			out.println("Bye xoxo");
 			out.flush();
+			//===================================================================
 		
 		}
 		catch (IOException e) 
