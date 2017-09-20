@@ -55,6 +55,7 @@ public class PartieOrdinateur implements Runnable {
 	        
 			
 	        //vérifie si la lettre entrée est dans le mot mystère
+			//**** http://www.cs.jhu.edu/~joanne/cs107/code/StaticMethods/hangmanMethods.java ****
 			//===================================================================
 			while(nbrEssais > 0 && motAffiche.contains("-")){
 				
@@ -64,21 +65,54 @@ public class PartieOrdinateur implements Runnable {
 				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		        String reponse = in.readLine();
 		        
-		        //**** http://www.cs.jhu.edu/~joanne/cs107/code/StaticMethods/hangmanMethods.java ****
-		       
-		        
+		        if(reponse.length() > 1){
+		        	int longeur = reponse.length();
+		        	char lettre;
+		        	
+		        	for(int i =0;i<longeur;i++){
+		        		 lettre = reponse.charAt(i);
+		        		 
+		        		 if(motMystere.indexOf(lettre) < 0)
+		 		        {
+		 		        	out.println("mauvaise reponse");
+		 		        	out.println(motAffiche);
+		 		        	out.flush();
+		 		        	nbrEssais -= 1;
+		 		        }
+		 		        else
+		 		        {
+		 		        	for(int index = 0;index<nbrLettre;index++){
+		 		        		if(motMystere.charAt(index) == lettre){
+		 		        			char[] motAfficheChar = motAffiche.toCharArray();
+		 		        			motAfficheChar[index] = lettre;
+		 		        			motAffiche = String.valueOf(motAfficheChar);
+		 		        			out.println("bonne reponse");
+		 		        			out.flush();
+		 		        		}
+		 		        	}
+		 		        	out.println(motAffiche);
+		 		        	out.flush();
+		 		        }
+		        		 
+		        	}
+		        }
+		        else{
 		        char lettre;
 		        lettre = reponse.charAt(0);
-		        if(motMystere.indexOf(lettre) < 0){
+		        
+		        if(motMystere.indexOf(lettre) < 0)
+		        {
 		        	out.println("mauvaise reponse");
 		        	out.println(motAffiche);
-		        	//out.println("Entrez une lettre. Il reste "+ nbrEssais + " essais" );
 		        	out.flush();
 		        	nbrEssais -= 1;
 		        }
-		        else{
-		        	for(int index = 0;index<nbrLettre;index++){
-		        		if(motMystere.charAt(index) == lettre){
+		        else
+		        {
+		        	for(int index = 0;index<nbrLettre;index++)
+		        	{
+		        		if(motMystere.charAt(index) == lettre)
+		        		{
 		        			char[] motAfficheChar = motAffiche.toCharArray();
 		        			motAfficheChar[index] = lettre;
 		        			motAffiche = String.valueOf(motAfficheChar);
@@ -90,6 +124,7 @@ public class PartieOrdinateur implements Runnable {
 		        	out.flush();
 		        }
 		     
+			}
 			}
 			//===================================================================
 			
