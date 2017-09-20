@@ -65,66 +65,28 @@ public class PartieOrdinateur implements Runnable {
 				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		        String reponse = in.readLine();
 		        
-		        if(reponse.length() > 1){
+		        if(reponse.length() > 1)
+		        {
 		        	int longeur = reponse.length();
 		        	char lettre;
 		        	
-		        	for(int i =0;i<longeur;i++){
+		        	for(int i =0;i<longeur;i++)
+		        	{
 		        		 lettre = reponse.charAt(i);
 		        		 
-		        		 if(motMystere.indexOf(lettre) < 0)
-		 		        {
-		 		        	out.println("mauvaise reponse");
-		 		        	out.println(motAffiche);
-		 		        	out.flush();
-		 		        	nbrEssais -= 1;
-		 		        }
-		 		        else
-		 		        {
-		 		        	for(int index = 0;index<nbrLettre;index++){
-		 		        		if(motMystere.charAt(index) == lettre){
-		 		        			char[] motAfficheChar = motAffiche.toCharArray();
-		 		        			motAfficheChar[index] = lettre;
-		 		        			motAffiche = String.valueOf(motAfficheChar);
-		 		        			out.println("bonne reponse");
-		 		        			out.flush();
-		 		        		}
-		 		        	}
-		 		        	out.println(motAffiche);
-		 		        	out.flush();
-		 		        }
-		        		 
+		        		 nbrEssais = DetermineEssais(motMystere, lettre, nbrEssais);
+		        		 motAffiche = DetermineLettre(motMystere, lettre, out, motAffiche, nbrEssais, nbrLettre);
 		        	}
-		        }
-		        else{
-		        char lettre;
-		        lettre = reponse.charAt(0);
-		        
-		        if(motMystere.indexOf(lettre) < 0)
-		        {
-		        	out.println("mauvaise reponse");
-		        	out.println(motAffiche);
-		        	out.flush();
-		        	nbrEssais -= 1;
 		        }
 		        else
 		        {
-		        	for(int index = 0;index<nbrLettre;index++)
-		        	{
-		        		if(motMystere.charAt(index) == lettre)
-		        		{
-		        			char[] motAfficheChar = motAffiche.toCharArray();
-		        			motAfficheChar[index] = lettre;
-		        			motAffiche = String.valueOf(motAfficheChar);
-		        			out.println("bonne reponse");
-		        			out.flush();
-		        		}
-		        	}
-		        	out.println(motAffiche);
-		        	out.flush();
-		        }
+		        	char lettre;
+		        	lettre = reponse.charAt(0);
+		        
+		        	nbrEssais = DetermineEssais(motMystere, lettre, nbrEssais);
+       		 		motAffiche = DetermineLettre(motMystere, lettre, out, motAffiche, nbrEssais, nbrLettre);
 		     
-			}
+		        }
 			}
 			//===================================================================
 			
@@ -165,5 +127,40 @@ public class PartieOrdinateur implements Runnable {
 
 	
 	
+	}
+
+	private int DetermineEssais(String motMystere, char lettre, int nbrEssais) {
+		if(motMystere.indexOf(lettre) < 0)
+        {
+        	nbrEssais -= 1;
+        }
+        
+        return nbrEssais;
+	}
+
+	private String DetermineLettre(String motMystere, char lettre, PrintWriter out, String motAffiche, int nbrEssais, int nbrLettre) {
+		 if(motMystere.indexOf(lettre) < 0)
+	        {
+	        	out.println("mauvaise reponse");
+	        	out.println(motAffiche);
+	        	out.flush();
+	        	nbrEssais -= 1;
+	        }
+	        else
+	        {
+	        	for(int index = 0;index<nbrLettre;index++){
+	        		if(motMystere.charAt(index) == lettre){
+	        			char[] motAfficheChar = motAffiche.toCharArray();
+	        			motAfficheChar[index] = lettre;
+	        			motAffiche = String.valueOf(motAfficheChar);
+	        			out.println("bonne reponse");
+	        			out.flush();
+	        		}
+	        	}
+	        	out.println(motAffiche);
+	        	out.flush();
+	        }
+		return motAffiche;
+		
 	}
 }
