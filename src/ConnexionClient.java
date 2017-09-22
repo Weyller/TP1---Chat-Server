@@ -22,6 +22,7 @@ import java.util.concurrent.ExecutorService;
 public class ConnexionClient implements Observer, Runnable{
 	private Socket socket;
 	private Conversation conversation;
+	private String role;
 	
 	/**
 	 * Constructeur parametrique 
@@ -29,10 +30,11 @@ public class ConnexionClient implements Observer, Runnable{
 	 * @param socket la connexion vers le client
 	 * @param conversation la conversation
 	 */
-	public ConnexionClient(Socket socket, Conversation conversation)
+	public ConnexionClient(Socket socket, Conversation conversation, String role)
 	{
 		this.socket = socket;
 		this.conversation = conversation;
+		this.role = role;
 		conversation.addObserver(this);
 	}
 	
@@ -63,6 +65,7 @@ public class ConnexionClient implements Observer, Runnable{
 	public void run() {
 		ExecutorService service = null;
 		PrintWriter out;
+		
 		try {
 			out = new PrintWriter(socket.getOutputStream());
 			out.println("Bienvenue au jeu du pendu!(serveur de Antoine)");	        
@@ -91,7 +94,18 @@ public class ConnexionClient implements Observer, Runnable{
 	        }
 	        
 	        if(choix.equals("j")){
-	        	out.println("Vous avez choisi joueur");
+	        	//*a faire
+	        	//envoyer les joueur vers un thread salle d'attente et dès qu'il y a un bourreau et un temoin ils commencent la partie
+	        	if(role == "bourreau"){
+	        		PartieJoueurBourreau bourreau = new PartieJoueurBourreau(socket, conversation, nom);
+	        		bourreau.run();
+	        	}
+	        	else if(role == "temoin"){
+	        		PartieJoueurTemoin temoin = new PartieJoueurTemoin(socket, conversation, nom);
+	        		temoin.run();
+	        	}
+				
+	        	
 	        }
 	        else if(choix.equals("o")){
 	        	PartieOrdinateur bot = new PartieOrdinateur(socket, conversation, nom);

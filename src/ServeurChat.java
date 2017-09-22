@@ -27,8 +27,9 @@ public class ServeurChat implements Observer{
 	 */
 	public void run()
 	{
-		ServerSocket socketDuServeur = null;// Le socket qui écoute sur le port 8000 et accepte les connexions.
+		ServerSocket socketDuServeur = null;// Le socket qui écoute sur le port 8888 et accepte les connexions.
 		ExecutorService service = null;
+		boolean premierJoueur = true;
 
 		try 
 		{
@@ -42,10 +43,31 @@ public class ServeurChat implements Observer{
 			while(true)
 			{
 				// Connexion d'un client
-				Socket socketVersLeClient = socketDuServeur.accept();
-				System.out.println("Un client s'est connecte au serveur");
+				//*a faire
+				//chaque connexion ajout� a une liste 
+				if(premierJoueur == true)
+				{
+					Socket socketVersLeClient1 = socketDuServeur.accept();
+					System.out.println("Un client s'est connecte au serveur");
+					System.out.println(socketVersLeClient1);
 
-				service.submit(new ConnexionClient(socketVersLeClient, conversation));
+					String role = "bourreau";
+
+					service.submit(new ConnexionClient(socketVersLeClient1, conversation, role));
+					premierJoueur = false;
+				}
+				else{
+					Socket socketVersLeClient2 = socketDuServeur.accept();
+					System.out.println("Un client s'est connecte au serveur");
+					System.out.println(socketVersLeClient2);
+
+					String role = "temoin";
+
+					service.submit(new ConnexionClient(socketVersLeClient2, conversation, role));
+					premierJoueur = true;
+				}
+				
+				
 			}
 		} 
 		catch (IOException e) {

@@ -47,7 +47,6 @@ public class PartieOrdinateur implements Runnable {
 
 
 			String motMystere = UDPClient.envoyerMessage("AAAAA").toLowerCase();//mot que la personne doit trouver
-			System.out.println(motMystere);
 			int nbrLettre = motMystere.length(); //nombre de lettre du mot mystère
 			String motAffiche = ""; //ce qui sera afficher à l'écran de l'usager
 
